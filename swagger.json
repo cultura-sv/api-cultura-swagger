@@ -1,0 +1,1587 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Cultura-SV",
+        "version": "1.0.0",
+        "description": "Api en desarrollo para la plataforma del ministerio de Cultura de El Salvador",
+        "contact": {
+            "name": "Yonatan Ulises Segura",
+            "email": "yonatansegura845@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://api.culturasv.online",
+            "description": "Servidor de desarrollo."
+        }
+    ],
+    "paths": {
+        "/v1/events": {
+            "get": {
+                "tags": [
+                    "Events"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventHomeObject"
+                                },
+                                "examples": {
+                                    "Success": {
+                                        "value": {
+                                            "count": 57,
+                                            "has_more": true,
+                                            "events": [
+                                                {
+                                                    "zone": "Central",
+                                                    "event_name": "Vallet Nacional",
+                                                    "is_free": true,
+                                                    "is_favorite": true,
+                                                    "event_date": "2019-12-24",
+                                                    "url_image": "img/imagen1",
+                                                    "event_place": "Teatro Nacional",
+                                                    "event_id": "57fafcd7-a902-4620-8895-857e7feb7e49",
+                                                    "status": 1
+                                                },
+                                                {
+                                                    "zone": "Oriental",
+                                                    "event_name": "Día del Libro",
+                                                    "is_free": true,
+                                                    "is_favorite": true,
+                                                    "event_date": "2019-12-20",
+                                                    "url_image": "img/imagen2",
+                                                    "event_place": "Casa de la Cultura Santa Ana",
+                                                    "event_id": "57fafcd7-a902-4620-8895-857e7feb7e49",
+                                                    "status": 2
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "summary": "Get All Events",
+                "description": "Obtener el listado de eventos con paginación."
+            },
+            "parameters": [
+                {
+                    "name": "page",
+                    "description": "número de página",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "query"
+                },
+                {
+                    "name": "depto",
+                    "description": "nombre del departamento",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "query"
+                },
+                {
+                    "name": "zone",
+                    "description": "Nombre de la zona",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "query"
+                },
+                {
+                    "name": "lat",
+                    "description": "Latitud ",
+                    "schema": {
+                        "format": "double",
+                        "type": "number"
+                    },
+                    "in": "query"
+                },
+                {
+                    "name": "long",
+                    "description": "longitud",
+                    "schema": {
+                        "format": "double",
+                        "type": "number"
+                    },
+                    "in": "query"
+                }
+            ]
+        },
+        "/v1/auth/signup": {
+            "summary": "Complete a user info",
+            "description": "Luego de iniciar sesión se debe de completar la información del usuario.",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthUserSignupRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthUserResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorObject"
+                                }
+                            }
+                        },
+                        "description": "500 Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "Signup",
+                "summary": "Signup"
+            }
+        },
+        "/v1/events/{event_id}": {
+            "description": "Identificador único del evento.",
+            "get": {
+                "tags": [
+                    "Events"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/EventDetail"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "summary": "Get Event Details",
+                "description": "Success"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "event_id_example": {
+                            "value": "1697ac9f-46ee-4fd5-8d82-48ca53e249fd"
+                        }
+                    },
+                    "name": "event_id",
+                    "description": "Identificador único del evento.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/places": {
+            "summary": "Get Places",
+            "description": "Muestra un listado de lugares.",
+            "get": {
+                "tags": [
+                    "Places"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/PlaceListResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "GetAllPlaces",
+                "summary": "Get All Places",
+                "description": "Muestra un Arreglo con todos los lugares disponibles. separados por categorías, ubicación, zonas."
+            }
+        },
+        "/v1/places/{places_id}": {
+            "get": {
+                "tags": [
+                    "Places"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/PlaceDetailResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "GetPlaceDetails",
+                "summary": "Get Place Details",
+                "description": "Información completa de un lugar."
+            },
+            "parameters": [
+                {
+                    "name": "places_id",
+                    "description": "Identificador único de Places",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/events/actions": {
+            "post": {
+                "requestBody": {
+                    "description": "Set Action",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventActionsBodyObject"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Events"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "SetEventAction",
+                "summary": "Set Event Action",
+                "description": "Crear un tipo de acción a realizar."
+            }
+        },
+        "/v1/events/trending": {
+
+        },
+        "/v1/events/favorites": {
+
+        },
+        "/v1/users/profile": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UserResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "GetUserProfile",
+                "summary": "Get User Profile"
+            }
+        },
+        "/v1/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CategoryListResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "GetAvailableCategories",
+                "summary": "Get Available Categories"
+            }
+        },
+        "/v1/auth/get-token": {
+            "summary": "Summar",
+            "description": "Description\n",
+            "post": {
+                "requestBody": {
+                    "description": "Payload de la solicitud que contiene el Id Token de firebase.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthTokenRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthTokenResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+
+                    }
+                ],
+                "operationId": "GetToken",
+                "summary": "Get Token",
+                "description": "Cuando un usuario o un dispositivo accede correctamente, Firebase crea un token de ID correspondiente que lo identifica de forma única y le otorga acceso a varios recursos, como Firebase Realtime Database y Cloud Storage."
+            }
+        },
+        "/v1/auth/refresh-token": {
+            "post": {
+                "requestBody": {
+                    "description": "Cuerpo de la solicitud\n",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthRefreshToken"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthTokenResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "RefreshToken",
+                "summary": "Refresh Token",
+                "description": "Si el token tiene fecha de vencimiento, una vez que caduzca se debe de volver a autenticarse."
+            }
+        },
+        "/v1/internal/events": {
+            "post": {
+                "requestBody": {
+                    "description": "New Event",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventNewObject"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Events",
+                    "Internal"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/EventDetail"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "CreateNewEvent",
+                "summary": "Create New Event",
+                "description": "Crear un nuevo evento."
+            }
+        },
+        "/v1/internal/events/{event_id}": {
+            "delete": {
+                "tags": [
+                    "Internal",
+                    "Events"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success\n"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "DeleteEvent",
+                "summary": "Delete Event",
+                "description": "Eliminar un evento."
+            },
+            "parameters": [
+                {
+                    "name": "event_id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/events/favorites/search": {
+
+        },
+        "/v1/users/profile/favorites/events": {
+
+        },
+        "/v1/users/profile/favorites/places": {
+
+        },
+        "/v1/users/profile/favorites/categories": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CategoryListWithPagination"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "FavoriteCategoriesList",
+                "summary": "Favorite Categories List"
+            }
+        },
+        "/v1/users/favorites": {
+            "post": {
+                "requestBody": {
+                    "description": "Categorias seleccionadas por el usuario.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/CategoriesIdObject"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CategoryListResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": [
+                        ]
+                    }
+                ],
+                "operationId": "SelectCategories",
+                "summary": "Select Categories"
+            }
+        },
+        "/v1/ping": {
+            "summary": "Server Status",
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+
+                    }
+                ],
+                "operationId": "ServerPing",
+                "summary": "Server Status",
+                "description": "Probar la disponibilidad del servidor."
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EventListObject": {
+                "description": "Tipo de dato para los eventos, vista en general ",
+                "type": "object",
+                "properties": {
+                    "zone": {
+                        "description": "Por ejemplo Central, Occidental, Oriental e Internacional",
+                        "type": "string"
+                    },
+                    "is_free": {
+                        "description": "Boolean, True si el evento es pagado.",
+                        "type": "boolean"
+                    },
+                    "is_favorite": {
+                        "description": "Boolean Si es TRUE, significa que el usuario tiene este evento en favoritos.",
+                        "type": "boolean"
+                    },
+                    "event_id": {
+                        "description": "Id único del evento. Ej. 58b7cece-8912-4491-a6d4-f22d0f2cfcd7",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Estado del evento",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "nombre del evento.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "zone": "Zona central",
+                    "is_free": true,
+                    "is_favorite": true,
+                    "event_id": "e2bab56d-0399-49bd-8076-bdeeccb34493",
+                    "status": 26,
+                    "title": "Taller de Canto Nacional"
+                }
+            },
+            "EventHomeObject": {
+                "description": "Esquema JSON que la vista Home consumirá",
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "description": "Número de eventos de resultado",
+                        "type": "integer"
+                    },
+                    "has_more": {
+                        "description": "Número máximo de páginas",
+                        "type": "boolean"
+                    },
+                    "events": {
+                        "description": "Arreglo de eventos",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventListObject"
+                        }
+                    }
+                },
+                "example": {
+                    "count": 33,
+                    "has_more": true,
+                    "events": [
+                        {
+                            "zone": "Zona central",
+                            "is_free": true,
+                            "is_favorite": true,
+                            "event_id": "e2bab56d-0399-49bd-8076-bdeeccb34493",
+                            "status": 83,
+                            "title": "Obra de teatro"
+                        },
+                        {
+                            "zone": "Zona central",
+                            "is_free": true,
+                            "is_favorite": true,
+                            "event_id": "e2bab56d-0599-49bd-8076-bdeeccb34493",
+                            "status": 50,
+                            "title": "exposicion de pinturas"
+                        }
+                    ]
+                }
+            },
+            "AuthTokenResponse": {
+                "description": "Respuesta del servidor del token verificado por el backend",
+                "required": [
+                    "is_complete"
+                ],
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "description": "JWT devuelto por el servidor, para realizar peticiones. este se debe de almacenar localmente en cada dispositivo y renovarse periodicamente. False=El usuario no ha completado el inicio de sesión. True=El Usuario ya completó su registro.",
+                        "type": "string"
+                    },
+                    "refresh_token": {
+                        "description": "El refresh token es usado para generar un nuevo token. Típicamente, si el token tiene fecha de expiración, una vez que caduca, el usuario tendría que autenticarse de nuevo para obtener un token. Con el refresh token, este paso se puede saltar y con una petición al API obtener un nuevo token que permita al usuario seguir accediendo a los recursos de la aplicación.",
+                        "type": "string"
+                    },
+                    "is_complete": {
+                        "description": "Variable que contiene el valor si el usuario no ha iniciado sesión.",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                    "is_complete": true
+                }
+            },
+            "AuthTokenRequest": {
+                "description": "Token de firebase que se recibe en el login",
+                "required": [
+                    "firebase_token"
+                ],
+                "type": "object",
+                "properties": {
+                    "firebase_token": {
+                        "description": "Token único de firebase para poder autenticarse de forma única para cada usuario. More info: https://firebase.google.com/docs/auth/admin/verify-id-tokens?hl=es",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "firebase_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+            },
+            "AuthUserResponse": {
+                "description": "Tipo de dato para crear el registro del usuario.",
+                "required": [
+                ],
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "description": "Primer nombre del usuario.",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "description": "apellidos del usuario.",
+                        "type": "string"
+                    },
+                    "age": {
+                        "description": "Edad del usuario",
+                        "type": "integer"
+                    },
+                    "genre": {
+                        "description": "Género del usuario, disponible 3: Masculino, Femenino, No binario.",
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "description": "Identificador único de un usuario",
+                        "type": "string"
+                    },
+                    "token": {
+                        "description": "",
+                        "type": "string"
+                    },
+                    "refresh_token": {
+                        "description": "",
+                        "type": "string"
+                    },
+                    "is_complete": {
+                        "description": "",
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "description": "",
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "",
+                        "type": "string"
+                    }
+                }
+            },
+            "EventDateObject": {
+                "description": "Objeto que contiene toda la información de las fechas del evento.",
+                "type": "object",
+                "properties": {
+                    "start_at": {
+                        "description": "fecha de inicio del evento. en la ISO. Por ejemplo: 2011-10-05T14:48:00.000Z.  More info https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Date/toISOString",
+                        "type": "string"
+                    },
+                    "end_at": {
+                        "description": "Fecha de finalización del Evento.por ejemplo: 2011-10-05T14:48:00.000Z.  More info https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Date/toISOString",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "start_at": "2011-10-05T14:48:00.000Z",
+                    "end_at": "2011-11-05T14:48:00.000Z"
+                }
+            },
+            "EventSponsorsObject": {
+                "description": "Tipo de dato que contiene los patrocinadores del evento.",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "nombre del patrocinador del evento",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Breve descripción del patrocinador",
+                        "type": "string"
+                    },
+                    "web_url": {
+                        "description": "URL oficial del patrocinador",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "URL del logo del patrocinador",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "Empresas wayne",
+                    "description": "encaragdo de sarollar tecnologia para el avance de electrodomesticos",
+                    "logo_url": "https://via.placeholder.com/150",
+                    "web_url": "http://www5.helpes.eu/01238229/EmpresasDeWayne"
+                }
+            },
+            "AuditFieldsObject": {
+                "description": "Campo que se utilizarán para una auditoría",
+                "type": "object",
+                "properties": {
+                    "created_at": {
+                        "description": "fecha en que fue creado el evento.",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "description": "Fecha en que actualizado el regisotr",
+                        "type": "string"
+                    },
+                    "create_by": {
+                        "description": "ID del usuario que creó el registro",
+                        "type": "string"
+                    },
+                    "updated_by": {
+                        "description": "Id del usuario que actualizó el registro",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "created_at": "2011-10-05T14:48:00.000Z",
+                    "updated_at": "2011-10-05T14:48:00.000Z",
+                    "create_by": "dc17d899-02da-4cc7-9248-c2cac2a587e3",
+                    "updated_by": "0b1d2211-3488-44be-975e-245ad72ea396"
+                }
+            },
+            "EventResponsableObject": {
+                "description": "Objeto que contiene la información del responsable del evento.",
+                "type": "object",
+                "properties": {
+                    "responsable_id": {
+                        "description": "identificador único del responsable del evento",
+                        "type": "string"
+                    },
+                    "responsable_name": {
+                        "description": "Nombre del responsable del evento",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Breve descripción del responsable. Ej. Dev.f es una escuela de programación enfocada en capacitar a personas de cualquier edad y nivel para desarrollar las habilidades y competencias necesarias para ingresar al mundo del Software",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email del encargado",
+                        "type": "string"
+                    },
+                    "following": {
+                        "description": "Si ya se sigue a este organizador. Boolean",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "responsable_id": "2a201190-2a5d-4a72-a9ff-29061562d51c",
+                    "responsable_name": "Carlos Hernesto Andrade",
+                    "description": "Director de CENAR realiza una atenta invitaciòn al concierto nacional de graduaciòn 2016",
+                    "email": "Carlos Hernesto Andrade@hotmail.com"
+                }
+            },
+            "EventDetailObject": {
+                "description": "Tipo de dato para los eventos, vista en general ",
+                "type": "object",
+                "properties": {
+                    "is_favorite": {
+                        "description": "Boolean Si es TRUE, significa que el usuario tiene este evento en favoritos.",
+                        "type": "boolean"
+                    },
+                    "event_id": {
+                        "description": "Id único del evento. Ej. 58b7cece-8912-4491-a6d4-f22d0f2cfcd7",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Estado del evento",
+                        "type": "integer"
+                    },
+                    "images": {
+                        "description": "Arreglo que contiene las URL de las imágenes.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "date": {
+                        "description": "fecha y hora del evento\nEj. 2011-10-05T14:48:00.000Z\n",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventDateObject"
+                        }
+                    },
+                    "attendees_count": {
+                        "description": "Número de personas que esistirán al evento.",
+                        "type": "integer"
+                    },
+                    "sponsors": {
+                        "description": "Arreglo que contiene la lista de los patrocinadores del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventSponsorsObject"
+                        }
+                    },
+                    "details": {
+                        "description": "Descripción completa del evento.",
+                        "type": "string"
+                    },
+                    "related_categories": {
+                        "description": "Lista de las categorías relacionadas con este evento",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoriesObject"
+                        }
+                    },
+                    "confirmed_assistance": {
+                        "description": "Si el usuario ya confirmó que asistirá al evento",
+                        "type": "boolean"
+                    },
+                    "target_audiences": {
+                        "description": "Público al que va dirigido el evento.",
+                        "type": "string"
+                    },
+                    "locations": {
+                        "description": "Objeto que contiene toda la información de la ubicación del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventUbicationObject"
+                        }
+                    },
+                    "rate_options": {
+                        "description": "Información sobre la tarifa del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RateObject"
+                        }
+                    },
+                    "max": {
+                        "description": "Capacidad maxima de personas que puede soportar las intalaciones donde se llevará acabo el evento.",
+                        "type": "integer"
+                    },
+                    "audit_fields": {
+                        "$ref": "#/components/schemas/AuditFieldsObject",
+                        "description": "Objeto que tiene la información de los campos de auditoria"
+                    },
+                    "name": {
+                        "description": "nombre del evento.",
+                        "type": "string"
+                    }
+                }
+            },
+            "EventUbicationObject": {
+                "description": "Tipo de dato que contiene la información de la ubicación del evento.",
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "description": "Nombre de la ciudad del Evento",
+                        "type": "string"
+                    },
+                    "first_direction": {
+                        "description": "Primera dirección que se debe de proporcionar para el evento.",
+                        "type": "string"
+                    },
+                    "department": {
+                        "description": "Nombre del departamento del evento. Ej. Chalatenango.",
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "format": "double",
+                        "description": "Valor de la latidud de la ubicación del evento",
+                        "type": "number"
+                    },
+                    "longitude": {
+                        "format": "double",
+                        "description": "Valor de la longitud de la ubicación del evento.",
+                        "type": "number"
+                    },
+                    "municipality": {
+                        "description": "municipio en donde se hará el evento.",
+                        "type": "string"
+                    },
+                    "zone": {
+                        "description": "Por ejemplo Central, Occidental, Oriental e Internacional",
+                        "type": "string"
+                    },
+                    "event_place": {
+                        "description": "Lugar del evento, Ej. Crowne Plaza San Salvador\n89 Avenida Norte y 11 Calle Poniente, Colonia Escalón\nSan Salvador, San Salvador 00000",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "city": "San Salvador",
+                    "first_direction": "Centro histórico de San Salvador",
+                    "department": "San Salvador",
+                    "latitude": 43.56,
+                    "longitude": 17.91,
+                    "municipality": "San salvador",
+                    "zone": "Zona central",
+                    "event_place": "Palacio Naciona"
+                }
+            },
+            "PlacesList": {
+                "description": "Listado de lugares",
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "description": "Número de eventos de resultado\n",
+                        "type": "integer"
+                    },
+                    "has_more": {
+                        "description": "Número máximo de páginas",
+                        "type": "boolean"
+                    },
+                    "places": {
+                        "description": "Listado de lugares.",
+                        "type": "array",
+                        "items": {
+
+                        }
+                    }
+                }
+            },
+            "PlacesDetailObject": {
+                "description": "Tipo de dato que contiene la información sobre los lugares.",
+                "type": "object",
+                "properties": {
+                    "place_id": {
+                        "description": "Identificador único para los lugares.",
+                        "type": "string"
+                    },
+                    "location": {
+                        "$ref": "#/components/schemas/EventUbicationObject",
+                        "description": "Ubicación del lugar."
+                    },
+                    "details": {
+                        "description": "Detalles o historia del lugar.",
+                        "type": "string"
+                    },
+                    "associated_events": {
+                        "description": "Eventos asociados a este lugar.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventListObject"
+                        }
+                    },
+                    "cover_images": {
+                        "description": "Lista de URL de imágenes para mostrar de portada.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "contact_info": {
+                        "$ref": "#/components/schemas/ContactInformationObject",
+                        "description": "información de contacto del lugar."
+                    },
+                    "rate_options": {
+                        "description": "Tipos de tarifa a pagar según sea el caso.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RateObject"
+                        }
+                    },
+                    "rating": {
+                        "format": "double",
+                        "description": "Calificación general del lugar.",
+                        "type": "number"
+                    },
+                    "reviews": {
+                        "description": "Número de personas que han votado para la calificación del lugar.",
+                        "type": "integer"
+                    },
+                    "is_following": {
+                        "description": "Si el usuario ya sigue a este lugar, para eventos relacionados.",
+                        "type": "boolean"
+                    },
+                    "schedules": {
+                        "description": "Arreglo que contiene los horarios del lugar.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlacesScheduleObject"
+                        }
+                    },
+                    "name": {
+                        "description": "Nombre del lugar.",
+                        "type": "string"
+                    }
+                }
+            },
+            "PlacesScheduleObject": {
+                "description": "Objeto que contiene la información de los horarios del lugar.",
+                "type": "object",
+                "properties": {
+                    "day": {
+                        "description": "Este puede ser lunes a domingo",
+                        "type": "string"
+                    },
+                    "close_at": {
+                        "description": "ISO",
+                        "type": "string"
+                    },
+                    "is_open_now": {
+                        "description": "Si está abierto en este horario",
+                        "type": "boolean"
+                    },
+                    "is_open_today": {
+                        "description": "Si en este día estará abierto el sitio.",
+                        "type": "boolean"
+                    },
+                    "open_at": {
+                        "description": "ISO",
+                        "type": "string"
+                    }
+                }
+            },
+            "ContactInformationObject": {
+                "description": "Objeto que contiene la información de contacto.",
+                "type": "object",
+                "properties": {
+                    "website_url": {
+                        "description": "URL del sitio web.",
+                        "type": "string"
+                    },
+                    "telephone_numbers": {
+                        "description": "números de teléfono.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "email": {
+                        "description": "Correo electrónico de contacto.",
+                        "type": "string"
+                    }
+                }
+            },
+            "RateObject": {
+                "description": "Información sobre precios o cuotas del evento.",
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "description": "Costo de entrada al evento.",
+                        "type": "string"
+                    },
+                    "currency": {
+                        "description": "Tipo de moneda aceptada.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Descripción de la tarifa. Ejemplo: \"Por persona\"",
+                        "type": "string"
+                    },
+                    "is_free": {
+                        "description": "Boolean, True si el evento es pagado.",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "amount": "$5.00",
+                    "currency": "USD",
+                    "description": "Niños hasta 12 años",
+                    "is_free": false
+                }
+            },
+            "EventActionsBodyObject": {
+                "description": "Acciones que el backend podrá realizar en un evento.",
+                "type": "object",
+                "properties": {
+                    "event_id": {
+                        "description": "Identificador único del evento.",
+                        "type": "string"
+                    },
+                    "action_name": {
+                        "description": "Nombre de la acción a realizar. para más información consultar en: [Confluence link]",
+                        "type": "string"
+                    }
+                }
+            },
+            "ErrorObject": {
+                "description": "Tipo de dato para los errores de la API",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "description": "Código del error, personalizado.",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "Mensaje de error de la API para que el desarrollador tenga una idea del porqué del error.",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Estado del error. 404 not found por ejemplo.",
+                        "type": "string"
+                    }
+                }
+            },
+            "PlaceListObject": {
+                "description": "Objeto de Place que contiene los campos que se requieren para un listado de lugares.",
+                "type": "object",
+                "properties": {
+                    "schedule": {
+                        "$ref": "#/components/schemas/PlacesScheduleObject",
+                        "description": "horario de atención del lugar"
+                    },
+                    "vote_average": {
+                        "format": "double",
+                        "description": "promedio de estrellas de las personas que han valorado el sitio.",
+                        "type": "number"
+                    },
+                    "place_id": {
+                        "description": "Identificador único del lugar.",
+                        "type": "string"
+                    },
+                    "is_favorite": {
+                        "description": "Si el lugar es favorito por el usuario.",
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "description": "Nombre del lugar.",
+                        "type": "string"
+                    },
+                    "short_direction": {
+                        "description": "dirección corta del lugar.",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "URL de la imágen del lugar",
+                        "type": "string"
+                    }
+                }
+            },
+            "PlaceWithCategoriesObject": {
+                "description": "Objeto que contiene los lugares ordenados por categorías.",
+                "type": "object",
+                "properties": {
+                    "category_name": {
+                        "description": "nombre de la categoría a la que pertecene el lugar.",
+                        "type": "string"
+                    },
+                    "category_id": {
+                        "description": "Identificador único de categoría.",
+                        "type": "string"
+                    },
+                    "places": {
+                        "description": "Arreglo que contiene los lugares asociados a la categoría.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlaceListObject"
+                        }
+                    }
+                }
+            },
+            "PlaceWithCategoriesListObject": {
+                "description": "Listado segmentado por categorías de lugares.",
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "description": "número de lugares encontrados.",
+                        "type": "integer"
+                    },
+                    "page": {
+                        "description": "número de página",
+                        "type": "integer"
+                    },
+                    "has_more": {
+                        "description": "si hay más resultados",
+                        "type": "boolean"
+                    },
+                    "place_items": {
+                        "description": "Categorías asociadas a eventos.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlaceWithCategoriesObject"
+                        }
+                    }
+                }
+            },
+            "UserObject": {
+                "description": "Tipo de dato para crear el registro del usuario.",
+                "required": [
+                ],
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "description": "Primer nombre del usuario.",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "description": "apellidos del usuario.",
+                        "type": "string"
+                    },
+                    "age": {
+                        "description": "Edad del usuario",
+                        "type": "integer"
+                    },
+                    "genre": {
+                        "description": "Género del usuario, disponible 3: Masculino, Femenino, No binario.",
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "description": "Identificador único de un usuario",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email del usuario",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "URL de la foto de usuario",
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthRefreshToken": {
+                "description": "Tipo de dato que contiene el refresh_token",
+                "required": [
+                    "refresh_token"
+                ],
+                "type": "object",
+                "properties": {
+                    "refresh_token": {
+                        "description": "Cadena de string que contiene el Refresh-Token",
+                        "type": "string"
+                    }
+                }
+            },
+            "EventNewObject": {
+                "description": "Tipo de dato para los eventos, vista en general ",
+                "type": "object",
+                "properties": {
+                    "images": {
+                        "description": "Arreglo que contiene las URL de las imágenes.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "date": {
+                        "description": "fecha y hora del evento\nEj. 2011-10-05T14:48:00.000Z\n",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventDateObject"
+                        }
+                    },
+                    "attendees_count": {
+                        "description": "Número de personas que esistirán al evento.",
+                        "type": "integer"
+                    },
+                    "sponsors": {
+                        "description": "Arreglo que contiene la lista de los patrocinadores del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventSponsorsObject"
+                        }
+                    },
+                    "details": {
+                        "description": "Descripción completa del evento.",
+                        "type": "string"
+                    },
+                    "related_categories": {
+                        "description": "Lista de las categorías relacionadas con este evento",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoriesObject"
+                        }
+                    },
+                    "target_audiences": {
+                        "description": "Público al que va dirigido el evento.",
+                        "type": "string"
+                    },
+                    "locations": {
+                        "description": "Objeto que contiene toda la información de la ubicación del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventUbicationObject"
+                        }
+                    },
+                    "rate_options": {
+                        "description": "Información sobre la tarifa del evento.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RateObject"
+                        }
+                    },
+                    "max": {
+                        "description": "Capacidad maxima de personas que puede soportar las intalaciones donde se llevará acabo el evento.",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "nombre del evento.",
+                        "type": "string"
+                    }
+                }
+            },
+            "CategoriesObject": {
+                "description": "Nombre de las categorias a las que el evento pertecene",
+                "type": "object",
+                "properties": {
+                    "category_id": {
+                        "description": "Identificador único de la categoria",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Nombre de la categoría. Ej. \"Danza\"",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "URL de la imagen de la categoria",
+                        "type": "string"
+                    }
+                }
+            },
+            "CategoriesIdObject": {
+                "description": "Nombre de las categorias a las que el evento pertecene",
+                "type": "object",
+                "properties": {
+                    "category_id": {
+                        "description": "Identificador único de la categoria",
+                        "type": "string"
+                    }
+                }
+            },
+            "CategoryListWithPagination": {
+                "description": "Lista de categorías con paginacion",
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "description": "número de items encontrados.",
+                        "type": "integer"
+                    },
+                    "page": {
+                        "description": "número de página",
+                        "type": "integer"
+                    },
+                    "has_more": {
+                        "description": "si hay más resultados",
+                        "type": "boolean"
+                    },
+                    "categories": {
+                        "description": "Arreglo que contiene los objetos de categorías",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoriesObject"
+                        }
+                    }
+                }
+            },
+            "AuthUserSignupRequest": {
+                "description": "Tipo de dato para crear el registro del usuario.",
+                "required": [
+                    "first_name",
+                    "last_name",
+                    "age",
+                    "genre"
+                ],
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "description": "Primer nombre del usuario.",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "description": "apellidos del usuario.",
+                        "type": "string"
+                    },
+                    "age": {
+                        "description": "Edad del usuario",
+                        "type": "integer"
+                    },
+                    "genre": {
+                        "description": "Género del usuario, disponible 3: Masculino, Femenino, No binario.",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "Url de la imágen de perfil",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "EventDetail": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/EventDetailObject"
+                        }
+                    }
+                },
+                "description": "Success"
+            },
+            "PlaceDetailResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/PlacesDetailObject"
+                        }
+                    }
+                },
+                "description": "Success"
+            },
+            "500InternalServerError": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorObject"
+                        }
+                    }
+                },
+                "description": "Internal Server Error"
+            },
+            "PlaceListResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/PlaceWithCategoriesListObject"
+                        }
+                    }
+                },
+                "description": "Success"
+            },
+            "CategoryListResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/CategoriesObject"
+                            }
+                        }
+                    }
+                },
+                "description": "Success"
+            },
+            "UserResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthUserResponse"
+                        }
+                    }
+                },
+                "description": "Success"
+            },
+            "CategoryListWithPagination": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CategoryListWithPagination"
+                        }
+                    }
+                },
+                "description": "Success"
+            }
+        },
+        "securitySchemes": {
+            "JWT": {
+                "scheme": "bearer",
+                "type": "http",
+                "description": "JSON Web Token será la tecnología empleada para poder brindarle seguridad a la API"
+            }
+        }
+    },
+    "security": [
+        {
+            "JWT": [
+            ]
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Todos los endpoints para adminsitrar la authenticación de los usuarios."
+        },
+        {
+            "name": "Users",
+            "description": "Endpoints para administrar los usuarios"
+        },
+        {
+            "name": "Events",
+            "description": "Enpoints para administrar todo lo que respecta a eventos."
+        },
+        {
+            "name": "Places",
+            "description": "Endpoints para administrar los lugares"
+        },
+        {
+            "name": "Categories",
+            "description": "Endpoints para las categorías de los lugares."
+        },
+        {
+            "name": "Internal",
+            "description": "Endpoints para la web"
+        }
+    ]
+}
