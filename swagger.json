@@ -553,6 +553,9 @@
         "/v1/ping": {
             "summary": "Server Status",
             "get": {
+                "tags": [
+                    "Status"
+                ],
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -1581,7 +1584,7 @@
         },
         {
             "name": "Internal",
-            "description": "Endpoints para la web"
+            "description": "Endpoints para la web, pero se moverán a otra API"
         }
     ]
 }
