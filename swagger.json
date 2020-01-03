@@ -11,8 +11,8 @@
     },
     "servers": [
         {
-            "url": "Dev Server",
-            "description": "https://api.culturasv.online"
+            "url": "https://api.culturasv.online",
+            "description": "Dev Server"
         }
     ],
     "paths": {
